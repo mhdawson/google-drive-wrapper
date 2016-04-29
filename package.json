@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "google-auth-library": "^0.9.7",
-    "googleapis": "^5.0.0"
+    "googleapis": "^5.0.0",
+    "mime-types: "^2.1.10"
   },
   "keywords": [
     "google",
