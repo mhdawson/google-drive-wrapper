@@ -1,0 +1,31 @@
+{
+  "name": "google-drive-wrapper",
+  "version": "0.5.0",
+  "description": "Wrapper to simplify interaction with google drive apis",
+  "main": "lib/gdriveWrapper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhdawson/google-drive-wrapper.git"
+  },
+  "dependencies": {
+    "google-auth-library": "^0.9.7",
+    "googleapis": "^5.0.0"
+  },
+  "keywords": [
+    "google",
+    "apis",
+    "api",
+    "server",
+    "drive",
+    "google drive"
+  ],
+  "author": "Michael Dawson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mhdawson/google-drive-wrapper/issues"
+  },
+  "homepage": "https://github.com/mhdawson/google-drive-wrapper#readme"
+}
