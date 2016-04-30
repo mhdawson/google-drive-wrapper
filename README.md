@@ -1,10 +1,9 @@
 # google-drive-wrapper
 
 Wrapper to simplify transferring files to/from google
-driver.  
+drive.
 
-The google-auth-wrapper ([npm]()/
-[github](https://github.com/mhdawson/google-auth-wrapper))
+The google-auth-wrapper ([npm]()/[github](https://github.com/mhdawson/google-auth-wrapper))
 can be used to get the credentials required to access your google drive 
 account.
 
