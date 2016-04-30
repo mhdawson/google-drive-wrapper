@@ -3,8 +3,7 @@
 Wrapper to simplify transferring files to/from google
 driver.  
 
-The google-auth-wrapper (
-[npm]()
+The google-auth-wrapper ([npm]()/
 [github](https://github.com/mhdawson/google-auth-wrapper))
 can be used to get the credentials required to access your google drive 
 account.
@@ -14,7 +13,7 @@ are transferred to google drive.  If compressed/encrypted
 they are decrypted/decompressed as they are download from
 google drive. Before using please ensure you have validated that
 the encryption is suitable for the data you are protecting
-and that you have verified the implmention 
+and that you have verified the implementation.
 
 This modules provides these methods: 
 
@@ -25,7 +24,7 @@ This modules provides these methods:
 * getMetaForFilename
 * getFileMetaData 
 
-As examples the following use the uploadNewFiles and downloadNewFiles
+As examples, the following use the uploadNewFiles and downloadNewFiles
 methods (of course use your own passwords, not the ones shown!).  See
 the info for 
 [google-auth-wrapper](https://github.com/mhdawson/google-auth-wrapper)
@@ -48,14 +47,15 @@ googleAuth.execute('./', 'client_secret', function(auth, google) {
 </PRE>
 
 Uploads all files from the local directory 'upload' to the google
-drive directory 'backups'
+drive directory 'backups'.  Once transferred files are moved from
+the 'upload' directory to the 'upload-done' directory.
 <PRE>
 var googleAuth = require('google-auth-wrapper');
 var gdriveWrapper = require('./gdriveWrapper.js');
 
 googleAuth.execute('./', 'client_secret', function(auth, google) {
   var wrapper = new gdriveWrapper(auth, google, 'goodpassword');
-  wrapper.uploadNewFiles('backups/docker-images', 'upload', 'upload-done', function(err) {
+  wrapper.uploadNewFiles('backups', 'upload', 'upload-done', function(err) {
     if(err) {
       console.log(err);
     }
