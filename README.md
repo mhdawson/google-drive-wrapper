@@ -16,6 +16,7 @@ and that you have verified the implementation.
 
 This modules provides these methods: 
 
+* gdriveWrapper
 * uploadFile
 * downloadFile
 * downloadNewFiles
@@ -61,3 +62,39 @@ googleAuth.execute('./', 'client_secret', function(auth, google) {
   });
 });
 </PRE>
+
+# Methods
+
+## gdriveWrapper
+
+the gdriveWrapper is used to create a new wrapper instance that
+can be used to invoke the other methods.  It takes the following
+parameters:
+
+* auth - googleAuth.OAuth2 object to be used to access the google services
+* google - instance of googleapis to be used to access the google services
+* password - password from which the key used to encrypt/decrypt the files
+  will be derived.
+
+## uploadFile
+
+uploadFile takes the following arguments:
+
+* filename - name of the file to be used in google drive
+* sourceFile - name of the local file to be uploaded
+* options - object as described below
+* complete - function to be called when upload is complete
+  or an error occurs.  The first parameter will err.  err
+  will either be null if the upload was succesful or an 
+  Error object with information as to why the upload
+  failed.
+
+The options object can optionally have the following fields:
+
+* encrypt - if true file is encrypted, if false it is not. Default
+  is to encrypt
+* compress - if true file is compressed, if false it is not.  Default
+  is to compress
+* parent - google file id for the parent directory into which the
+  file will be uploaded 
+  
