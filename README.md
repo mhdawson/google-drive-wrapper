@@ -98,12 +98,12 @@ The options object can optionally have the following fields:
 * parent - google file id for the parent directory into which the
   file will be uploaded 
 
-## downloadFfile
+## downloadFile
 
-downloadFIle takes the following arguments:
+downloadFile takes the following arguments:
 
 * filedId - google id of the file to be downloaded.  You can get this
-  id for a particular path using getMetaForFileName
+  id for a particular path using getMetaForFileName()
 * destFilename - name for the file on the local filesystem
 * complete - function to be called when download is complete
   or an error occurs.  The first parameter will be err.  err
@@ -111,9 +111,13 @@ downloadFIle takes the following arguments:
   Error object with information as to why the downlaod
   failed.
   
-If the google file ends with the '.enc' file extension downloadFile will
+If the name of the file with the specified google Id
+ends with the '.enc' file extension downloadFile will
 attempt to decrypt during the download. Similarly if the file
 ends with '.gz.enc' or '.gz' then downloadFile will attempt
 decompress the file during the download. (Its still a TODO to make
-this optional)
+this optional).  If decrypted and/or decompressed the '.enc'
+and/or '.gz' extensions will be removed.
+
+
 
