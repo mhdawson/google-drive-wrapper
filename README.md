@@ -84,7 +84,7 @@ uploadFile takes the following arguments:
 * sourceFile - name of the local file to be uploaded
 * options - object as described below
 * complete - function to be called when upload is complete
-  or an error occurs.  The first parameter will err.  err
+  or an error occurs.  The first parameter will be err.  err
   will either be null if the upload was succesful or an 
   Error object with information as to why the upload
   failed.
@@ -97,4 +97,23 @@ The options object can optionally have the following fields:
   is to compress
 * parent - google file id for the parent directory into which the
   file will be uploaded 
+
+## downloadFfile
+
+downloadFIle takes the following arguments:
+
+* filedId - google id of the file to be downloaded.  You can get this
+  id for a particular path using getMetaForFileName
+* destFilename - name for the file on the local filesystem
+* complete - function to be called when download is complete
+  or an error occurs.  The first parameter will be err.  err
+  will either be null if the download was succesful or an
+  Error object with information as to why the downlaod
+  failed.
   
+If the google file ends with the '.enc' file extension downloadFile will
+attempt to decrypt during the download. Similarly if the file
+ends with '.gz.enc' or '.gz' then downloadFile will attempt
+decompress the file during the download. (Its still a TODO to make
+this optional)
+
