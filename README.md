@@ -3,7 +3,8 @@
 Wrapper to simplify transferring files to/from google
 drive.
 
-The google-auth-wrapper ([npm]()/[github](https://github.com/mhdawson/google-auth-wrapper))
+The npm google-auth-wrapper
+([npm]()/[github](https://github.com/mhdawson/google-auth-wrapper))
 can be used to get the credentials required to access your google drive 
 account.
 
@@ -28,9 +29,10 @@ As examples, the following use the uploadNewFiles and downloadNewFiles
 methods (of course use your own passwords, not the ones shown!).  See
 the info for 
 [google-auth-wrapper](https://github.com/mhdawson/google-auth-wrapper)
-for how to create the required 'client_secret.json' file:
+for how to create the required 'client_secret.json' and 
+'client_secret.token' files:
 
-Downloads all files in the google drive file 'backups' into the local
+This example downloads all files in the google drive file 'backups' into the local
 directory 'download':
 <PRE>
 var googleAuth = require('google-auth-wrapper');
@@ -46,7 +48,7 @@ googleAuth.execute('./', 'client_secret', function(auth, google) {
 });
 </PRE>
 
-Uploads all files from the local directory 'upload' to the google
+This example uploads all files from the local directory 'upload' to the google
 drive directory 'backups'.  Once transferred files are moved from
 the 'upload' directory to the 'upload-done' directory.
 <PRE>
@@ -63,11 +65,15 @@ googleAuth.execute('./', 'client_secret', function(auth, google) {
 });
 </PRE>
 
+
+There are also methods to upload/download individual files as described
+below.
+
 # Methods
 
 ## gdriveWrapper
 
-the gdriveWrapper is used to create a new wrapper instance that
+gdriveWrapper is used to create a new wrapper instance that
 can be used to invoke the other methods.  It takes the following
 parameters:
 
@@ -87,7 +93,8 @@ uploadFile takes the following arguments:
   or an error occurs.  The first parameter will be err.  err
   will either be null if the upload was succesful or an 
   Error object with information as to why the upload
-  failed.
+  failed. If successful the second parameter will be the
+  google meta object for the file uploaded.
 
 The options object can optionally have the following fields:
 
@@ -109,7 +116,8 @@ downloadFile takes the following arguments:
   or an error occurs.  The first parameter will be err.  err
   will either be null if the download was succesful or an
   Error object with information as to why the downlaod
-  failed.
+  failed. If successful the second paratmer will be the
+  google meta object for the file downloaded.
   
 If the name of the file with the specified google Id
 ends with the '.enc' file extension downloadFile will
@@ -120,4 +128,111 @@ this optional).  If decrypted and/or decompressed the '.enc'
 and/or '.gz' extensions will be removed.
 
 
+## downloadNewFiles
+
+Downloads all of the files from the specific google
+drive folder to a local directory. 
+downloadNewFiles uses a file called '.existing' in the
+local download directory to track files by their
+google file id.  Once downloaded succesfully the
+file will not be downloaded again unless you specify
+a different local download directory or deleete
+the '.existing' file in the local download directory.
+
+The download files will be named both by their file
+name in from the file metadata as well as the google
+file id.  This is required because multiple files
+in the same folder can have the same file name in the
+meta data.  The local files are named as:
+
+  fileid-filename
+
+each file will be decrypted and or decompressed
+based on its file name as described for downloadFile()
+above.
+
+downloadNewFiles takes the following arguments:
+
+* gdriveDirectory - directory path in google drive, this will
+  be converted to a google drive file id by getMetaForFilename()
+* targetDirectory - the local directory to which files will
+  be downloaded
+* complete - function to be called when download is complete
+  or an error occurs.  The first parameter will be err.  err
+  will either be null if the download was succesful or an
+  Error object with information as to why the downlaod
+  failed.
+
+## uploadNewFiles
+
+Uploads all files from a local directory in to a folder in
+google drive.  
+
+As files are uploaded each file will be encrypted and or
+compressed as described for uploadFile() above.  (still
+a TODO to make this optional for uploadNewFiles()).
+
+uploadNewFiles takes the following arguments:
+
+* gdriveDirectory - folder in google drive to uplaod files into
+  will be converted into google file id using 
+  getMetaForFileName().
+* sourceDirectory - local directory with the files to upload
+* moveTo - directory to which files are moved to after they
+  have been uploaded.  Once the upload is complete the result
+  is that all of the files in sourceDirectory should have been
+  uploaded and moved to the moveTo directory
+* complete - function to be called when upload is complete
+  or an error occurs.  The first parameter will be err.  err
+  will either be null if the upload was succesful or an
+  Error object with information as to why the upload
+  failed.
+
+## getMetaForFilename
+
+Converts a path like name to a google file id.  Finds the
+google file id for each segment and then limits search in
+next segement to the the file id for the previous segment.
+It will find the fist occurance of a file whoes filename 
+matches a segment.  Since multiple files with the same
+parent can have the same filename in their metadata
+this may not always get the file you expect.  It is up to
+you to make sure you manage the naming of the parents
+so that the name you pass in will resolve to the expected
+google file id.  For example if you resolve:
+
+<PRE>
+/level1/level2
+</PRE>
+
+you will need to make sure that only one file has the
+filename 'level1' at the root of your drive and that
+only one child of 'level1' is named 'level2'.
+
+getMetaForFilename takes the following arguments:
+
+* filename - path like file name to be resolved
+* complete - function to be called when resolution is
+  complete or an error occurs  The first parameter will
+  be err.  err will either be null if the resolution
+  was succesful or an Error object with information
+  as to why the resolution failed. If successful
+  the second parameter will be the google drive
+  metadata object for file matching the file specified.
+
+##  getFileMetaData 
+
+Returns the metadata for a file give the google
+drive file id.
+
+getFileMetaData takes the following arguments:
+
+* fileId - file id for the file
+* complete - function to be called when resolution is
+  complete or an error occurs  The first parameter will
+  be err.  err will either be null if the resolution
+  was succesful or an Error object with information
+  as to why the resolution failed. If successful
+  the second parameter will be the google drive
+  metadata object for file matching the file specified.
 
