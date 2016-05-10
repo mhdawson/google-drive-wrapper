@@ -25,9 +25,14 @@ This modules provides these methods:
 * getMetaForFilename
 * getFileMetaData 
 
-As examples, the following use the uploadNewFiles and downloadNewFiles
-methods (of course use your own passwords, not the ones shown!).  See
-the info for 
+They allow individual files to be uploaded/download and the contents
+of directories to be uploaded and downloaded. On upload they allow
+a file to be converted into a google doc format for sharing/editing
+in the same manner as any other googlo doc.
+
+As examples, the following use the uploadNewFiles, downloadNewFiles
+and uploadFile methods (of course use your own passwords,
+not the ones shown!).  See the info for 
 [google-auth-wrapper](https://github.com/mhdawson/google-auth-wrapper)
 for how to create the required 'client_secret.json' and 
 'client_secret.token' files:
@@ -36,7 +41,7 @@ This example downloads all files in the google drive file 'backups' into the loc
 directory 'download':
 <PRE>
 var googleAuth = require('google-auth-wrapper');
-var gdriveWrapper = require('./gdriveWrapper.js');
+var gdriveWrapper = require('google-drive-wrapper');
 
 googleAuth.execute('./', 'client_secret', function(auth, google) {
   var wrapper = new gdriveWrapper(auth, google, 'goodpassword');
@@ -53,7 +58,7 @@ drive directory 'backups'.  Once transferred files are moved from
 the 'upload' directory to the 'upload-done' directory.
 <PRE>
 var googleAuth = require('google-auth-wrapper');
-var gdriveWrapper = require('./gdriveWrapper.js');
+var gdriveWrapper = require('google-drive-wrapper');
 
 googleAuth.execute('./', 'client_secret', function(auth, google) {
   var wrapper = new gdriveWrapper(auth, google, 'goodpassword');
@@ -65,9 +70,42 @@ googleAuth.execute('./', 'client_secret', function(auth, google) {
 });
 </PRE>
 
+This example uploads a text file and specifies that it should be converted
+into a google doc document that can be edited online like any other google
+doc:
 
-There are also methods to upload/download individual files as described
-below.
+<PRE>
+var googleAuth = require('google-auth-wrapper');
+var gdriveWrapper = require('google-drive-wrapper');
+
+
+googleAuth.execute('./', 'client_secret', function(auth, google) {
+  var wrapper = new gdriveWrapper(auth, google, 'goodpassword');
+
+  wrapper.getMetaForFilename('/backups/docker-images', function(err, parentMeta) {
+    if (err !== null) {
+      console.log('Invalid directory path');
+    }
+    wrapper.uploadFile('testdoc', 'testdoc.txt',
+                       {parent: parentMeta.id, compress: false, encrypt: false,
+                        convert: true, mimeType: 'application/vnd.google-apps.document'},
+                       function(err, meta) {
+      if (err !== null) {
+        console.log('Failed to upload file');
+      } else {
+        console.log('Sharable link: https://drive.google.com/open?id=' + meta.id);
+      }
+    });
+  });
+});
+</PRE>
+
+We need to disable both compression and encryption as we want the file to be
+plaintext so it can be converted.  We then need to specify 'convert: true' so 
+that the file will be converted on upload, and then we need to specify
+the mimeType for the type we want it to be convered to.  In the case of the
+example we use 'application/vnd.google-apps.document' to ask that it be
+converted to a google gdoc document.
 
 # Methods
 
@@ -104,6 +142,11 @@ The options object can optionally have the following fields:
   is to compress
 * parent - google file id for the parent directory into which the
   file will be uploaded 
+* convert - set to true to ask that the file be converted to
+  a google doc on uploaded (optional, default is not to convert)
+* mimeType - mime type for the type of google doc that the file
+  should be converted to if 'convert: true' was specified (required
+  if convert is set to true, otherwise ignored)
 
 ## downloadFile
 
@@ -145,7 +188,9 @@ file id.  This is required because multiple files
 in the same folder can have the same file name in the
 meta data.  The local files are named as:
 
+<PRE>
   fileid-filename
+</PRE>
 
 each file will be decrypted and or decompressed
 based on its file name as described for downloadFile()
@@ -161,7 +206,8 @@ downloadNewFiles takes the following arguments:
   or an error occurs.  The first parameter will be err.  err
   will either be null if the download was succesful or an
   Error object with information as to why the downlaod
-  failed.
+  failed. If there was an error, if available the second
+  parameter will be the fileName associated with the error
 
 ## uploadNewFiles
 
@@ -216,9 +262,12 @@ getMetaForFilename takes the following arguments:
   complete or an error occurs  The first parameter will
   be err.  err will either be null if the resolution
   was succesful or an Error object with information
-  as to why the resolution failed. If successful
-  the second parameter will be the google drive
-  metadata object for file matching the file specified.
+  as to why the resolution failed. If there is an
+  error then if available, the second parameter
+  will be the file that the meta was requested for.
+  If successful the second parameter will be the
+  google drive metadata object for file matching
+  the file specified.
 
 ##  getFileMetaData 
 
