@@ -4,7 +4,8 @@ Wrapper to simplify transferring files to/from google
 drive.
 
 The npm google-auth-wrapper
-([npm]()/[github](https://github.com/mhdawson/google-auth-wrapper))
+([npm](https://www.npmjs.com/package/google-auth-wrapper)/
+[github](https://github.com/mhdawson/google-auth-wrapper))
 can be used to get the credentials required to access your google drive 
 account.
 
