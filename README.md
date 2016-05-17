@@ -25,6 +25,7 @@ This modules provides these methods:
 * uploadNewFiles
 * getMetaForFilename
 * getFileMetaData 
+* listFiles
 
 They allow individual files to be uploaded/download and the contents
 of directories to be uploaded and downloaded. On upload they allow
@@ -126,7 +127,9 @@ parameters:
 uploadFile takes the following arguments:
 
 * filename - name of the file to be used in google drive
-* sourceFile - name of the local file to be uploaded
+* sourceFile - name of the local file to be uploaded OR a stream
+  for the file to be uploaded.  If a stream is provided the mime type
+  for the source will be 'application/octet-stream'
 * options - object as described below
 * complete - function to be called when upload is complete
   or an error occurs.  The first parameter will be err.  err
@@ -221,8 +224,8 @@ a TODO to make this optional for uploadNewFiles()).
 
 uploadNewFiles takes the following arguments:
 
-* gdriveDirectory - folder in google drive to uplaod files into
-  will be converted into google file id using 
+* gdriveDirectory - folder in google drive to upload files
+  into, will be converted into google file id using
   getMetaForFileName().
 * sourceDirectory - local directory with the files to upload
 * moveTo - directory to which files are moved to after they
@@ -286,3 +289,21 @@ getFileMetaData takes the following arguments:
   the second parameter will be the google drive
   metadata object for file matching the file specified.
 
+## listFiles
+
+Passes an array of metadata to the completion handler
+with one entry for each regular file in the path
+specified.
+
+listFiles takes the following arguments:
+
+* gdriveDirectory - folder in google drive to list
+  the contents of, will be converted into google
+  file id using getMetaForFileName().
+* complete - function to be called with the result
+  or if an error occurs. The first parameter will
+  be err. err will either be null if successfull
+  or an Error object with information about the
+  error that occurred. If successful the second
+  parameter will be the array of metadata, one
+  for each regular file in the path specified.
