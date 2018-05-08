@@ -32,6 +32,12 @@ of directories to be uploaded and downloaded. On upload they allow
 a file to be converted into a google doc format for sharing/editing
 in the same manner as any other googlo doc.
 
+The password parameter in gdriveWrapper() is used for encrypting/decrypting the
+file with aes-256-cbc before transfering to Google or after retrieving the
+file. NOTE: This means the file will be encrypted on the Drive service and
+so it will not be usable in Drive directly (opening, editing, etc..) By default,
+options.encrypt is false and encryption won't be used.
+
 As examples, the following use the uploadNewFiles, downloadNewFiles
 and uploadFile methods (of course use your own passwords,
 not the ones shown!).  See the info for 
