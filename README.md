@@ -24,7 +24,7 @@ This modules provides these methods:
 * downloadNewFiles
 * uploadNewFiles
 * getMetaForFilename
-* getFileMetaData 
+* getFileMetadata 
 * listFiles
 
 They allow individual files to be uploaded/download and the contents
@@ -279,12 +279,12 @@ getMetaForFilename takes the following arguments:
   google drive metadata object for file matching
   the file specified.
 
-##  getFileMetaData 
+##  getFileMetadata 
 
 Returns the metadata for a file give the google
 drive file id.
 
-getFileMetaData takes the following arguments:
+getFileMetadata takes the following arguments:
 
 * fileId - file id for the file
 * complete - function to be called when resolution is
